@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-inter), sans-serif;
+  --font-sans: 'Inter', sans-serif;
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -25,6 +27,8 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 0;
 }
 
 .glass-panel {

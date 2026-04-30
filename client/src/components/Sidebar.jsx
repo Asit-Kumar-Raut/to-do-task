@@ -1,4 +1,4 @@
-"use client";
+import React from 'react';
 import { Calendar, CheckSquare, Clock, LayoutDashboard, ListTodo } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -42,7 +42,7 @@ export default function Sidebar({ isOpen, closeSidebar, activeTab, setActiveTab 
                   setActiveTab(item.id);
                   if (window.innerWidth < 1024) closeSidebar();
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all relative ${
                   isActive 
                   ? 'bg-primary/10 text-primary font-medium' 
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800'

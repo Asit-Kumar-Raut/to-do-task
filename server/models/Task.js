@@ -24,7 +24,8 @@ const TaskSchema = new mongoose.Schema({
   intervals: [{
     startTime: String, // e.g., '09:00'
     endTime: String,   // e.g., '09:05'
-    completed: { type: Boolean, default: false }
+    completed: { type: Boolean, default: false },
+    reminderSent: { type: Boolean, default: false }
   }],
   category: {
     type: String,

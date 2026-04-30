@@ -1,6 +1,5 @@
-"use client";
-import { useContext } from 'react';
-import { AuthContext } from '@/context/AuthContext';
+import React, { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import { LogOut, Menu, Bell } from 'lucide-react';
 import { motion } from 'framer-motion';
 

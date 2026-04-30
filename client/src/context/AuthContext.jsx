@@ -1,14 +1,13 @@
-"use client";
 import React, { createContext, useState, useEffect } from 'react';
 import api from '../lib/axios';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -21,19 +20,19 @@ export const AuthProvider = ({ children }) => {
         .catch(() => {
           localStorage.removeItem('token');
           setLoading(false);
-          router.push('/login');
+          navigate('/login');
         });
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [navigate]);
 
   const login = async (email, password) => {
     try {
       const res = await api.post('/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
       setUser(res.data);
-      router.push('/');
+      navigate('/');
     } catch (error) {
       throw error.response?.data?.message || 'Login failed';
     }
@@ -44,7 +43,7 @@ export const AuthProvider = ({ children }) => {
       const res = await api.post('/auth/register', { name, email, password });
       localStorage.setItem('token', res.data.token);
       setUser(res.data);
-      router.push('/');
+      navigate('/');
     } catch (error) {
       throw error.response?.data?.message || 'Registration failed';
     }
@@ -53,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
-    router.push('/login');
+    navigate('/login');
   };
 
   return (

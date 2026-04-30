@@ -1,5 +1,5 @@
-"use client";
-import { Calendar, Clock, MoreVertical, Trash2, CheckCircle } from 'lucide-react';
+import React from 'react';
+import { Calendar, Clock, Trash2, CheckCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 

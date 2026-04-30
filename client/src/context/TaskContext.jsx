@@ -1,4 +1,3 @@
-"use client";
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../lib/axios';
 import io from 'socket.io-client';
@@ -44,7 +43,6 @@ export const TaskProvider = ({ children }) => {
   const addTask = async (taskData) => {
     try {
       await api.post('/tasks', taskData);
-      // Socket will trigger fetchTasks
     } catch (error) {
       throw error;
     }

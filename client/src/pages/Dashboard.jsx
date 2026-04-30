@@ -1,12 +1,11 @@
-"use client";
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '@/context/AuthContext';
-import { TaskContext } from '@/context/TaskContext';
-import { useRouter } from 'next/navigation';
-import Navbar from '@/components/Navbar';
-import Sidebar from '@/components/Sidebar';
-import TaskCard from '@/components/TaskCard';
-import TaskModal from '@/components/TaskModal';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { TaskContext } from '../context/TaskContext';
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
+import TaskCard from '../components/TaskCard';
+import TaskModal from '../components/TaskModal';
 import { Plus } from 'lucide-react';
 import { isToday, isThisWeek, parseISO } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,7 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function Dashboard() {
   const { user, loading: authLoading } = useContext(AuthContext);
   const { tasks, loading: tasksLoading, addTask, updateTask, deleteTask } = useContext(TaskContext);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -22,9 +21,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login');
+      navigate('/login');
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading, navigate]);
 
   if (authLoading || !user) {
     return <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
