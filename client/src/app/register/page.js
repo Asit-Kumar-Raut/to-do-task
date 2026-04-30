@@ -1,0 +1,115 @@
+"use client";
+import { useState, useContext } from 'react';
+import { AuthContext } from '@/context/AuthContext';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { User, Mail, Lock } from 'lucide-react';
+
+export default function Register() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const { register } = useContext(AuthContext);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await register(name, email, password);
+    } catch (err) {
+      setError(err);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900 relative overflow-hidden">
+      {/* Decorative blobs */}
+      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full max-w-md p-8 m-4 rounded-2xl glass-panel shadow-2xl relative z-10"
+      >
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-extrabold mb-2">Create Account</h1>
+          <p className="text-gray-500 dark:text-gray-400">Join <span className="color-username">__asit.0.___</span> Task Manager</p>
+        </div>
+
+        {error && (
+          <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-6 text-sm text-center">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium mb-1">Full Name</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                <User size={18} />
+              </div>
+              <input 
+                type="text" 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                placeholder="John Doe"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Email Address</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                <Mail size={18} />
+              </div>
+              <input 
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                <Lock size={18} />
+              </div>
+              <input 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                placeholder="••••••••"
+                required
+                minLength={6}
+              />
+            </div>
+          </div>
+
+          <motion.button 
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            type="submit"
+            className="w-full py-3 bg-primary text-white rounded-xl font-medium shadow-lg shadow-indigo-500/30 hover:bg-primary-hover transition-colors mt-2"
+          >
+            Sign Up
+          </motion.button>
+        </form>
+
+        <p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+          Already have an account? <Link href="/login" className="text-primary font-medium hover:underline">Sign in</Link>
+        </p>
+      </motion.div>
+    </div>
+  );
+}
