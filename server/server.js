@@ -13,12 +13,15 @@ const server = http.createServer(app);
 // Configure Socket.io
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000', // Frontend URL
+    origin: process.env.CLIENT_URL || 'http://localhost:3000', // Frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   },
 });
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true,
+}));
 app.use(express.json());
 
 // Pass io to routes via middleware

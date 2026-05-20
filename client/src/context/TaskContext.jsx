@@ -26,7 +26,7 @@ export const TaskProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       fetchTasks();
-      const socket = io('http://localhost:5000');
+      const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000');
       
       socket.on('taskUpdated', () => {
         fetchTasks();
