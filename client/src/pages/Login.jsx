@@ -8,7 +8,20 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login } = useContext(AuthContext);
+  const { login, guestLogin } = useContext(AuthContext);
+  const [guestLoading, setGuestLoading] = useState(false);
+
+  const handleGuestLogin = async () => {
+    setError('');
+    setGuestLoading(true);
+    try {
+      await guestLogin();
+    } catch (err) {
+      setError(err);
+    } finally {
+      setGuestLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,6 +97,26 @@ export default function Login() {
             Sign In
           </motion.button>
         </form>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200 dark:border-slate-600" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400">or</span>
+          </div>
+        </div>
+
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          type="button"
+          onClick={handleGuestLogin}
+          disabled={guestLoading}
+          className="w-full py-3 border-2 border-primary text-primary dark:text-indigo-300 rounded-xl font-medium hover:bg-primary/5 transition-colors disabled:opacity-50"
+        >
+          {guestLoading ? 'Signing in...' : 'Continue as Guest'}
+        </motion.button>
 
         <p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
           Don't have an account? <Link to="/register" className="text-primary font-medium hover:underline">Create one</Link>

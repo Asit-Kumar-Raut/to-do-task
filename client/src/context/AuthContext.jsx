@@ -38,6 +38,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const guestLogin = async () => {
+    try {
+      const res = await api.post('/auth/guest');
+      localStorage.setItem('token', res.data.token);
+      setUser(res.data);
+      navigate('/');
+    } catch (error) {
+      throw error.response?.data?.message || 'Guest login failed';
+    }
+  };
+
   const register = async (name, email, password) => {
     try {
       const res = await api.post('/auth/register', { name, email, password });
@@ -56,7 +67,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, guestLogin, register, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

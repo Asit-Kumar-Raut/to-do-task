@@ -78,6 +78,42 @@ router.post('/verify-otp', async (req, res) => {
   }
 });
 
+const GUEST_EMAIL = 'guest@taskmanager.local';
+const GUEST_NAME = 'Guest User';
+
+// @route   POST /api/auth/guest
+router.post('/guest', async (req, res) => {
+  try {
+    const guestPassword = process.env.GUEST_PASSWORD || 'guest-demo-password-2024';
+    let user = await User.findOne({ email: GUEST_EMAIL });
+
+    if (!user) {
+      user = await User.create({
+        name: GUEST_NAME,
+        email: GUEST_EMAIL,
+        password: guestPassword,
+        isVerified: true,
+        isGuest: true,
+      });
+    } else if (!user.isVerified) {
+      user.isVerified = true;
+      user.isGuest = true;
+      await user.save();
+    }
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isGuest: true,
+      token: generateToken(user._id),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // @route   POST /api/auth/login
 router.post('/login', async (req, res) => {
   try {
