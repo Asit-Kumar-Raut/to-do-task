@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -12,8 +12,15 @@ export default function Register() {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const { register } = useContext(AuthContext); // Note: register from context will be used differently now
+  const { user, register } = useContext(AuthContext); // Note: register from context will be used differently now
   const navigate = useNavigate();
+
+  // Redirect if already logged in (including guest mode)
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleRegister = async (e) => {
     e.preventDefault();

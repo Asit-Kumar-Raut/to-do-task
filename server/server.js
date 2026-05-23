@@ -4,8 +4,10 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const http = require('http');
 const { Server } = require('socket.io');
+const path = require('path');
 
-dotenv.config();
+// Load environment variables with absolute path
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 const server = http.createServer(app);
@@ -30,10 +32,20 @@ app.use((req, res, next) => {
   next();
 });
 
-// Database connection
-mongoose.connect(process.env.MONGO_URI)
+// Database connection validation
+if (!process.env.MONGO_URI) {
+  console.error('CRITICAL ERROR: MONGO_URI is not defined in environment variables.');
+  process.exit(1);
+}
+
+mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 5000 // Fail fast if connection cannot be established
+})
   .then(() => console.log('MongoDB connected to TaskManager DB'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+  .catch((err) => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1); // Crash early so it's highly visible in the server logs
+  });
 
 // Root route — visiting backend URL in browser shows server status
 app.get('/', (req, res) => {

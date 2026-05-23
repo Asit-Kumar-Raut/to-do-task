@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock } from 'lucide-react';
 
@@ -8,8 +8,16 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login, guestLogin } = useContext(AuthContext);
+  const { user, login, guestLogin } = useContext(AuthContext);
   const [guestLoading, setGuestLoading] = useState(false);
+  const navigate = useNavigate();
+
+  // Redirect if already logged in (including guest mode)
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleGuestLogin = async () => {
     setError('');
